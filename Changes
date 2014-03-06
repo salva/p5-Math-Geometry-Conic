@@ -1,0 +1,6 @@
+Revision history for Perl extension Math::Geometry::Conic.
+
+0.01  Thu Mar  6 14:42:08 2014
+	- original version; created by h2xs 1.23 with options
+		-AXn Math::Geometry::Conic
+
