@@ -2,41 +2,27 @@
 /* [ Created with wxMaxima version 13.04.2 ] */
 
 /* [wxMaxima: input   start ] */
-solve([-2*(x0 - x1)*x -2*(y0 - y1)*y + x0^2 - x1^2 + y0^2 - y1^2 = 2*(r0 - r1)*r + r0^2 - r1^2,
-       -2*(x2 - x1)*x -2*(y2 - y1)*y + x2^2 - x1^2 + y2^2 - y1^2 = 2*(r2 - r1)*r + r2^2 - r1^2],
-       [x,y]);
+eq0: [x=r*(1-c),y=r*s,c^2+s^2=1];
+solve(eq0, [r,c,s]);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: input   start ] */
-eq_xy: first(solve([-2*(x0 - x1)*x -2*(y0 - y1)*y + x0^2 - x1^2 + y0^2 - y1^2 = 2*(r0 - r1)*r + r0^2 - r1^2,
-                 -2*(x2 - x1)*x -2*(y2 - y1)*y + x2^2 - x1^2 + y2^2 - y1^2 = 2*(r2 - r1)*r + r2^2 - r1^2],
-                [x,y]));
+eq: [x=(r+r0)*(1-c),y=(r+r0)*s,c^2+s^2=1];
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: input   start ] */
-eq_r: [(x - x0)^2 + (y - y0)^2 = (r + r0)^2];
+solve(eq, [r,c,s]);
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: input   start ] */
-eq_xyr: append(eq_xy, eq_r);
+wxplot2d([(1+x^2)/(2*x)], [x,-1,10], [y,-10,10],
+ [nticks,10])$
 /* [wxMaxima: input   end   ] */
 
 /* [wxMaxima: input   start ] */
-x: −(y1*(y2^2−y0^2+x2^2−x0^2−r2^2−2*r*r2+r0^2+2*r*r0)+y0*(−y2^2−x2^2+x1^2+r2^2+2*r*r2−r1^2−2*r*r1)+y0^2*y2−x1^2*y2+x0^2*y2+r1^2*y2+2*r*r1*y2−r0^2*y2−2*r*r0*y2+y1^2*(y0−y2))/(2*x1*y2−2*x0*y2+(2*x0−2*x2)*y1+(2*x2−2*x1)*y0);
-y: (x1*(y2^2+x2^2−x0^2−r2^2−2*r*r2+r0^2+2*r*r0)+x0*(−y2^2−x2^2+r2^2+2*r*r2−r1^2−2*r*r1)+(x0−x2)*y1^2+(x2−x1)*y0^2+x0^2*x2+r1^2*x2+2*r*r1*x2−r0^2*x2−2*r*r0*x2+x1^2*(x0−x2))/(2*x1*y2−2*x0*y2+(2*x0−2*x2)*y1+(2*x2−2*x1)*y0);
+wxplot3d((x^2 + y^2) / (2*x), [x,0,10], [y,-5,5])$
 /* [wxMaxima: input   end   ] */
 
-/* [wxMaxima: input   start ] */
-eq_r: (x - x0)^2 + (y - y0)^2 = (r + r0)^2;
-/* [wxMaxima: input   end   ] */
-
-/* [wxMaxima: input   start ] */
-solve(eq_r, r);
-/* [wxMaxima: input   end   ] */
-
-/* [wxMaxima: input   start ] */
-ratsimp(solve(eq_r, r));
-/* [wxMaxima: input   end   ] */
 
 /* Maxima can't load/batch files which end with a comment! */
 "Created with wxMaxima"$
