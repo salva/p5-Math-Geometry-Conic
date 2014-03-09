@@ -27,36 +27,58 @@ sub _det {
 sub point_equidistant_to_three_circunferences {
     my ($o0, $r0, $o1, $r1, $o2, $r2) = @_;
 
-    my @o = ($o0, $o1, $o2);
-    my @r = ($r0, $r1, $r2);
 
+    my ($x0, $y0) = @$o0;
+    my @o = ($o1, $o2);
+    my @r = ($r1, $r2);
     my (@X, @Y, @R, @B);
-    for my $i (0..2) {
-        my $j = ($i + 1) % 3;
-
+    for my $i (0..1) {
         my ($xi, $yi) = @{$o[$i]};
         my $ri = $r[$i];
-        my ($xj, $yj) = @{$o[$j]};
-        my $rj = $r[$j];
 
-        $X[$i] = $xi - $xj;
-        $Y[$i] = $yi - $yj;
-        $R[$i] = $ri - $rj;
-        $B[$i] = -0.5 * (   $xi * $xi - $xj * $xj
-                          + $yi * $yi - $yj * $yj
-                          - $ri * $ri + $rj * $rj );
+        $X[$i] = $xi - $x0;
+        $Y[$i] = $yi - $y0;
+        $R[$i] = $r0 - $ri;
+        $B[$i] = 0.5 * (   $xi * $xi - $x0 * $x0
+                         + $yi * $yi - $y0 * $y0
+                         - $ri * $ri + $r0 * $r0 );
     }
 
-    my $d = _det(\@X, \@Y, \@R);
-    return unless $d;
-    my $k = 1 / $d;
-    my $r = $k * _det(\@X, \@Y, \@B);
-    return unless $r >= 0;
+    my $det = $X[0] * $Y[1] - $X[1] * $Y[0];
+    return unless $det;
+    my $idet = 1 / $det;
 
-    my $x = $k * _det(\@B, \@Y, \@R);
-    my $y = $k * _det(\@X, \@B, \@R);
-    my $o = V($x, $y);
-    wantarray ? ($o, $r) : $o;
+    my $xr = $idet * ($R[0] * $Y[1] - $R[1] * $Y[0]);
+    my $xb = $idet * ($B[0] * $Y[1] - $B[1] * $Y[0]);
+
+    my $yr = $idet * ($X[0] * $R[1] - $X[1] * $R[0]);
+    my $yb = $idet * ($X[0] * $B[1] - $X[1] * $B[0]);
+
+    my $xb0 = $xb - $x0;
+    my $yb0 = $yb - $y0;
+
+    my $a = $xr * $xr + $yr * $yr - 1;
+    return unless $a; # degenerated case
+    my $inv_a = 1 / $a;
+    my $b = $inv_a * ($xb0 * $xr + $yb0 * $yr - $r0);
+    my $c = $inv_a * ($xb0 * $xb0 + $yb0 * $yb0 - $r0 * $r0);
+
+    my $discriminant = $b * $b - $c;
+    return unless $discriminant >= 0;
+    my $sqrt_discriminant = sqrt($discriminant);
+
+    my $r = -$b - $sqrt_discriminant;
+    if ($r < 0) {
+        $r = -$b + $sqrt_discriminant;
+        return if $r < 0;
+    }
+
+    my $x = $xr * $r + $xb;
+    my $y = $yr * $r + $yb;
+
+    
+
+    wantarray ? (V($x, $y), $r) : V($x, $y);
 }
 
 
